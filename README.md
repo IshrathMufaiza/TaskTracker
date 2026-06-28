@@ -1,4 +1,4 @@
-# ✅ Task Tracker — MERN Stack
+#  Task Tracker — MERN Stack
 
 A full-stack task management app built with MongoDB, Express, React, and Node.js.
 
@@ -43,59 +43,6 @@ task-tracker/
     │   └── utils/       # api.js (all fetch calls)
     └── .env.example
 ```
-
----
-
-## Getting Started
-
-### 1. Clone the repo
-```bash
-git clone <your-repo-url>
-cd task-tracker
-```
-
-### 2. Set up environment variables
-
-**Backend** — create `backend/.env` from the example:
-```bash
-cp backend/.env.example backend/.env
-```
-Fill in your MongoDB Atlas connection string and client URL.
-
-**Frontend** — create `frontend/.env` from the example:
-```bash
-cp frontend/.env.example frontend/.env
-```
-Set `VITE_API_URL` to your backend URL.
-
-### 3. Install dependencies
-```bash
-# From root
-npm install          # installs concurrently
-cd backend && npm install
-cd ../frontend && npm install
-```
-
-### 4. Run both servers
-```bash
-# From root
-npm run dev
-```
-- Backend: http://localhost:5000
-- Frontend: http://localhost:5173
-
----
-
-## REST API Reference
-
-| Method | Endpoint          | Description              |
-|--------|-------------------|--------------------------|
-| GET    | /api/tasks        | Get all tasks (+ filters)|
-| GET    | /api/tasks/:id    | Get task by ID           |
-| POST   | /api/tasks        | Create a task            |
-| PUT    | /api/tasks/:id    | Update a task            |
-| DELETE | /api/tasks/:id    | Delete a task            |
-
 ### Query Params (GET /api/tasks)
 - `status` — `todo` | `in-progress` | `done`
 - `priority` — `low` | `medium` | `high`
@@ -112,22 +59,14 @@ npm run dev
 }
 ```
 
----
 
 ## Deployment
 
 ### Backend → Render
-1. Create a new **Web Service** on [render.com](https://render.com)
-2. Connect your GitHub repo, set root directory to `backend/`
-3. Build command: `npm install`
-4. Start command: `npm start`
-5. Add environment variables: `MONGO_URI`, `PORT`, `CLIENT_URL`
+link: https://tasktracker-oadw.onrender.com/api
 
 ### Frontend → Vercel
-1. Import your repo on [vercel.com](https://vercel.com)
-2. Set root directory to `frontend/`
-3. Add environment variable: `VITE_API_URL=https://your-backend.onrender.com/api`
-
+link: https://task-tracker-seven-sepia.vercel.app
 ---
 
 ## Tech Stack
