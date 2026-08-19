@@ -1,5 +1,162 @@
 <!DOCTYPE html>
+<html lang="en"><!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProTask Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center py-10 px-4">
+
+    <div class="w-full max-w-xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 md:p-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">ProTask Tracker</h1>
+                <p class="text-xs text-slate-400 mt-1">Organize your workflow efficiently</p>
+            </div>
+            <div class="bg-slate-800 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-400 border border-slate-700">
+                <span id="task-counter">0 pending</span>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <form id="task-form" class="space-y-3 mb-6">
+            <div class="flex gap-2">
+                <input type="text" id="task-input" placeholder="What needs to be done?" required
+                    class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition">
+                <select id="priority-input" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-emerald-500 text-slate-300">
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold py-3 rounded-xl transition duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/10">
+                <i class="fa-solid fa-plus"></i> Add Task
+            </button>
+        </form>
+
+        <!-- Filter Tabs -->
+        <div class="flex gap-2 mb-6 border-b border-slate-800 pb-4">
+            <button onclick="setFilter('all')" id="filter-all" class="flex-1 py-1.5 text-xs font-semibold rounded-lg bg-emerald-500/10 text-emerald-400 transition">All</button>
+            <button onclick="setFilter('active')" id="filter-active" class="flex-1 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:bg-slate-800 transition">Active</button>
+            <button onclick="setFilter('completed')" id="filter-completed" class="flex-1 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:bg-slate-800 transition">Completed</button>
+        </div>
+
+        <!-- Task List -->
+        <ul id="task-list" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+            <!-- Dynamic Tasks Go Here -->
+        </ul>
+    </div>
+
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let currentFilter = 'all';
+
+        const taskForm = document.getElementById('task-form');
+        const taskInput = document.getElementById('task-input');
+        const priorityInput = document.getElementById('priority-input');
+        const taskList = document.getElementById('task-list');
+        const taskCounter = document.getElementById('task-counter');
+
+        function saveAndRender() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        taskForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = taskInput.value.trim();
+            if(!text) return;
+
+            const newTask = {
+                id: Date.now(),
+                text: text,
+                priority: priorityInput.value,
+                completed: false
+            };
+
+            tasks.unshift(newTask);
+            taskInput.value = '';
+            saveAndRender();
+        });
+
+        function toggleTask(id) {
+            tasks = tasks.map(t => t.id === id ? {...t, completed: !t.completed} : t);
+            saveAndRender();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveAndRender();
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            ['all', 'active', 'completed'].forEach(f => {
+                const btn = document.getElementById(`filter-${f}`);
+                if(f === filter) {
+                    btn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg bg-emerald-500/10 text-emerald-400 transition";
+                } else {
+                    btn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:bg-slate-800 transition";
+                }
+            });
+            renderTasks();
+        }
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            
+            const filtered = tasks.filter(t => {
+                if(currentFilter === 'active') return !t.completed;
+                if(currentFilter === 'completed') return t.completed;
+                return true;
+            });
+
+            const pendingCount = tasks.filter(t => !t.completed).length;
+            taskCounter.innerText = `${pendingCount} pending`;
+
+            if(filtered.length === 0) {
+                taskList.innerHTML = `<p class="text-center text-slate-500 text-xs py-8">No tasks found.</p>`;
+                return;
+            }
+
+            filtered.forEach(task => {
+                const li = document.createElement('li');
+                li.className = `flex items-center justify-between p-3.5 rounded-xl border transition ${task.completed ? 'bg-slate-900/40 border-slate-900 text-slate-500' : 'bg-slate-950 border-slate-800 text-slate-200'}`;
+                
+                let badgeColor = 'bg-slate-800 text-slate-300';
+                if(task.priority === 'High') badgeColor = 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
+                if(task.priority === 'Medium') badgeColor = 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+                if(task.priority === 'Low') badgeColor = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+
+                li.innerHTML = `
+                    <div class="flex items-center gap-3 flex-1 min-w-0">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})"
+                            class="w-4 h-4 rounded border-slate-700 text-emerald-500 focus:ring-0 cursor-pointer">
+                        <span class="text-sm truncate ${task.completed ? 'line-through text-slate-500' : ''}">${escapeHtml(task.text)}</span>
+                    </div>
+                    <div class="flex items-center gap-3 ml-2">
+                        <span class="text-[10px] px-2 py-0.5 rounded-md font-medium ${badgeColor}">${task.priority}</span>
+                        <button onclick="deleteTask(${task.id})" class="text-slate-500 hover:text-rose-400 transition cursor-pointer text-xs">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+                taskList.appendChild(li);
+            });
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        renderTasks();
+    </script>
+</body>
+</html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
