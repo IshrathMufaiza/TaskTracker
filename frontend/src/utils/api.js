@@ -1,5 +1,3 @@
-// Centralising API calls here so components don't care about URLs or headers
-// If the base URL ever changes (like after deploying), we change it in one place
 
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
