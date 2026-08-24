@@ -1,4 +1,4 @@
-const API=window.TASKFLOW_API_URL||"http://localhost:8000";let status="all",category="All",tasks=[];
+const API = window.TASKFLOW_API_URL || "https://taskflow-api-xntg.onrender.com";let status="all",category="All",tasks=[];
 const $=s=>document.querySelector(s);
 async function api(path,opt={}){const r=await fetch(API+path,{headers:{"Content-Type":"application/json"},...opt});if(!r.ok){let x={};try{x=await r.json()}catch{}throw Error(x.detail||`Request failed (${r.status})`)}return r.status===204?null:r.json()}
 function esc(s=""){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
