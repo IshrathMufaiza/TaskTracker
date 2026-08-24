@@ -1,82 +1,75 @@
-#  Task Tracker — MERN Stack
+# TaskFlow
 
-A full-stack task management app built with MongoDB, Express, React, and Node.js.
+A clean and responsive task management application designed to help users organize tasks, prioritize work, track deadlines, and monitor progress.
 
-## Features
+TaskFlow uses a lightweight vanilla JavaScript frontend with a FastAPI backend and PostgreSQL database for production.
 
-**Core (Mandatory)**
-- Create, read, update, delete tasks (full CRUD)
-- Form validation on both frontend and backend
-- REST API with Express
-- MongoDB via Mongoose
-- Responsive UI (mobile + desktop)
-- Dynamic updates — no page refreshes needed
+## 🚀 Live Demo
 
-**Bonus**
-- Filter tasks by status and priority
-- Sort by newest / oldest / priority
-- Stats bar (total, to-do, in-progress, done, overdue count)
-- Overdue task detection with visual warning
-- Double-confirm before deleting
-- Toast notifications for all actions
-- Character counters on text fields
-- Dark theme with Catppuccin-inspired palette
+**Frontend:**  
+https://task-tracker-1b62-5azf3la6c-ishrath2224s-projects.vercel.app
 
----
+**Backend API:**  
+https://taskflow-api-xntg.onrender.com
 
-## Project Structure
+## ✨ Features
 
-```
-task-tracker/
+- Create, edit, complete, and delete tasks
+- Set task priorities
+- Organize tasks by category
+- Set due dates
+- Search and filter tasks
+- Track active and completed tasks
+- Identify overdue tasks
+- Dashboard statistics
+- Responsive and clean user interface
+- Persistent database storage
+- REST API architecture
+- Production deployment with Vercel and Render
+
+## 🛠️ Tech Stack
+
+### Frontend
+- HTML5
+- CSS3
+- Vanilla JavaScript
+
+### Backend
+- Python
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- Uvicorn
+
+### Database
+- SQLite for local development
+- PostgreSQL for production
+
+### Deployment
+- Vercel — Frontend
+- Render — Backend & PostgreSQL
+
+## 📁 Project Structure
+
+```text
+taskflow/
+│
 ├── backend/
-│   ├── controllers/     # Business logic
-│   ├── middleware/      # Error handler
-│   ├── models/          # Mongoose schemas
-│   ├── routes/          # Express routes + validation
-│   ├── server.js        # Entry point
-│   └── .env.example
-└── frontend/
-    ├── src/
-    │   ├── components/  # TaskForm, TaskCard, TaskList, FilterBar, StatsBar
-    │   ├── context/     # TaskContext (global state via useReducer)
-    │   ├── hooks/       # useTaskForm
-    │   └── utils/       # api.js (all fetch calls)
-    └── .env.example
-```
-### Query Params (GET /api/tasks)
-- `status` — `todo` | `in-progress` | `done`
-- `priority` — `low` | `medium` | `high`
-- `sort` — `newest` | `oldest` | `priority`
-
-### Task Schema
-```json
-{
-  "title": "string (required, max 100)",
-  "description": "string (optional, max 500)",
-  "status": "todo | in-progress | done",
-  "priority": "low | medium | high",
-  "dueDate": "ISO 8601 date string"
-}
-```
-
-
-## Deployment
-
-### Backend → Render
-link: https://tasktracker-oadw.onrender.com/api
-
-### Frontend → Vercel
-link: https://task-tracker-seven-sepia.vercel.app
----
-
-## Tech Stack
-
-| Layer    | Tech                          |
-|----------|-------------------------------|
-| Frontend | React 18, Vite, Context API   |
-| Backend  | Node.js, Express.js           |
-| Database | MongoDB, Mongoose             |
-| Styling  | Pure CSS (no UI library)      |
-| Toasts   | react-hot-toast               |
-| Dates    | date-fns                      |
-| Deploy   | Vercel (frontend), Render (backend) |
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── database.py
+│   │   ├── main.py
+│   │   ├── models.py
+│   │   └── schemas.py
+│   │
+│   ├── .env.example
+│   ├── render.yaml
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── index.html
+│   ├── app.js
+│   └── styles.css
+│
+├── .gitignore
+└── README.md
